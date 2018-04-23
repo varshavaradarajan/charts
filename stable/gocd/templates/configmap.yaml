@@ -36,7 +36,7 @@ data:
         "properties": [
           {
             "key": "Image",
-            "value": "gocd/gocd-agent-docker-dind:v18.2.0"
+            "value": "gocddemo/gocd-agent-dind:webinar"
           },
           {
             "key": "PodConfiguration",
