@@ -58,15 +58,13 @@ server:
   env:
     # server.env.goServerSystemProperties is a list of Java system properties, which needs to be provided to the GoCD Server, typically prefixed with -D unless otherwise stated.
     # Example: "-Xmx4096mb -Dfoo=bar"
-    goServerSystemProperties:
+    goServerSystemProperties: "-Dcruise.material.update.interval=10000 -Dmaterial.update.idle.interval=10000"
     #  server.env.extraEnvVars is the list of environment variables passed to GoCD Server
     extraEnvVars:
       - name: GOCD_PLUGIN_INSTALL_kubernetes-elastic-agents
         value: https://github.com/gocd/kubernetes-elastic-agents/releases/download/v1.0.1/kubernetes-elastic-agent-1.0.1-107.jar
       - name: GOCD_PLUGIN_INSTALL_docker-registry-artifact-plugin
         value: https://github.com/gocd/docker-registry-artifact-plugin/releases/download/0.0.1/docker-registry-artifact-plugin-0.0.1-16.jar
-      - name: GO_SERVER_SYSTEM_PROPERTIES
-        value: "-Dcruise.material.update.interval=10000"
 
   service:
     # server.service.type is the GoCD Server service type
