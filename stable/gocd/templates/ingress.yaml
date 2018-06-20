@@ -13,6 +13,7 @@ metadata:
     {{- range $key, $value := .Values.server.ingress.annotations }}
       {{ $key }}: {{ $value | quote }}
     {{- end }}
+    kubernetes.io/ingress.global-static-ip-name: goserver-static-ip
 spec:
   backend:
     serviceName: {{ template "gocd.fullname" . }}-server
