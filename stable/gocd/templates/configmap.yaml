@@ -14,6 +14,7 @@ data:
 
     SERVICE_ACCOUNT_PATH=/var/run/secrets/kubernetes.io/serviceaccount
     KUBE_TOKEN=$(<${SERVICE_ACCOUNT_PATH}/token)
+    CERTIFICATE=$(sed '1d;$d' ${SERVICE_ACCOUNT_PATH}/ca.crt | sed ':a;N;$!ba;s/\n/\\n/g')
 
     while true
     do
@@ -45,23 +46,27 @@ data:
         "id": "k8-cluster-profile",
         "plugin_id": "cd.go.contrib.elasticagent.kubernetes",
         "properties": [
-              {
-                "key": "go_server_url",
-                "value": "https://{{ template "gocd.fullname" . }}-server:{{ .Values.server.service.httpsPort }}/go"
-            },
-            {
-                "key": "kubernetes_cluster_url",
-                "value": "https://'$KUBERNETES_SERVICE_HOST':'$KUBERNETES_SERVICE_PORT_HTTPS'"
-              },
-              {
-                "key": "namespace",
-                "value": "{{ .Release.Namespace }}"
-              },
-              {
-                "key": "security_token",
-                "value": "'$KUBE_TOKEN'"
-              }
-          ]
+          {
+            "key": "go_server_url",
+            "value": "https://{{ template "gocd.fullname" . }}-server:{{ .Values.server.service.httpsPort }}/go"
+          },
+          {
+            "key": "kubernetes_cluster_url",
+            "value": "https://'$KUBERNETES_SERVICE_HOST':'$KUBERNETES_SERVICE_PORT_HTTPS'"
+          },
+          {
+            "key": "namespace",
+            "value": "{{ .Release.Namespace }}"
+          },
+          {
+            "key": "kubernetes_cluster_ca_cert",
+            "value": "'$CERTIFICATE'"
+          },
+          {
+            "key": "security_token",
+            "value": "'$KUBE_TOKEN'"
+          }
+        ]
       }' >> /godata/logs/preconfigure.log)
 
     echo "Trying to create an elastic profile now." >> /godata/logs/preconfigure.log
